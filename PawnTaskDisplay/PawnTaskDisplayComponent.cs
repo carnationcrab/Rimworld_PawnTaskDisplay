@@ -1,4 +1,5 @@
 ﻿using RimWorld;
+using System;
 using UnityEngine;
 using Verse;
 using Verse.AI;
@@ -31,9 +32,9 @@ public class PawnTaskDisplayComponent : MapComponent
                 continue;
             }
 
-            string reportString = currentJob.GetReport(pawn);
+            string reportString = FirstCharToUpper(currentJob.GetReport(pawn));
 
-            DrawLabelBelowPawn(pawn, $"is {reportString}");
+            DrawLabelBelowPawn(pawn, $"{reportString}");
         }
     }
 
@@ -56,5 +57,11 @@ public class PawnTaskDisplayComponent : MapComponent
         Widgets.Label(labelRect, label);
         Verse.Text.Anchor = TextAnchor.UpperLeft; // Reset the anchor
     }
+
+    public static string FirstCharToUpper(string input)
+    {
+        return string.Concat(input[0].ToString().ToUpper(), input.Substring(1));
+    }
+
 
 }
