@@ -16,7 +16,7 @@ public class PawnTaskDisplayComponent : MapComponent
 
         foreach (var pawn in map.mapPawns.AllPawnsSpawned)
         {
-            if (pawn.Faction != Faction.OfPlayer) continue; // Skip non-player pawns
+            if (pawn.Faction != Faction.OfPlayer || !pawn.RaceProps.Humanlike) continue; // Skip non-player pawns and pets, it was getting cluttered
 
             Job currentJob = pawn.CurJob;
             if (currentJob == null)
