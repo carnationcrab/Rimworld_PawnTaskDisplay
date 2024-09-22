@@ -63,7 +63,9 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="PawnTaskDisplayComponent.cs" />
+    <Compile Include="PawnTaskDisplayMod.cs" />
     <Compile Include="PawnTaskDisplayPatcher.cs" />
+    <Compile Include="PawnTaskDisplaySettings.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />

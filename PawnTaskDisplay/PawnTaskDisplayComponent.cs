@@ -13,7 +13,7 @@ public class PawnTaskDisplayComponent : MapComponent
     public override void MapComponentOnGUI()
     {
         base.MapComponentOnGUI();
-        if (Find.CurrentMap != map) return;
+        if (Find.CurrentMap != map || !PawnTaskDisplayMod.settings.showTaskLabels) return;
 
         foreach (var pawn in map.mapPawns.AllPawnsSpawned)
         {
