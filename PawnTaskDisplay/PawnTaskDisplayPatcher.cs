@@ -6,7 +6,7 @@ public static class DisplayPawnTaskMod
 {
     static DisplayPawnTaskMod()
     {
-        var harmony = new Harmony("com.example.rimworld.mod");
+    var harmony = new Harmony("com.losschicken.pawntaskdisplay");
         harmony.PatchAll();
         Log.Message("[PawnTaskDisplay] Harmony patches applied successfully.");
     }
