@@ -62,6 +62,4 @@ public class PawnTaskDisplayComponent : MapComponent
     {
         return string.Concat(input[0].ToString().ToUpper(), input.Substring(1));
     }
-
-
 }
