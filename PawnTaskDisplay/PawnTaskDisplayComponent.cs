@@ -34,7 +34,7 @@ public class PawnTaskDisplayComponent : MapComponent
 
             string reportString = FirstCharToUpper(currentJob.GetReport(pawn));
 
-            DrawLabelBelowPawn(pawn, $"{reportString}");
+            DrawLabelBelowPawn(pawn, reportString);
         }
     }
 
