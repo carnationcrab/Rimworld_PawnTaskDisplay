@@ -1,8 +1,9 @@
 ﻿using RimWorld;
-using System;
+using System.Collections.Generic;
 using UnityEngine;
 using Verse;
 using Verse.AI;
+
 
 public class PawnTaskDisplayComponent : MapComponent
 {
@@ -10,31 +11,57 @@ public class PawnTaskDisplayComponent : MapComponent
     {
     }
 
+    private Dictionary<Pawn, string> pawnJobReports = new Dictionary<Pawn, string>();
+    private Dictionary<Pawn, JobDef> pawnPreviousJobs = new Dictionary<Pawn, JobDef>(); // Track the previous job of each pawn
+
+
     public override void MapComponentOnGUI()
     {
         base.MapComponentOnGUI();
         if (Find.CurrentMap != map || !PawnTaskDisplayMod.settings.showTaskLabels) return;
 
+        bool DevMode = Prefs.DevMode;
+
         foreach (var pawn in map.mapPawns.AllPawnsSpawned)
         {
-            if (pawn.Faction != Faction.OfPlayer || !pawn.RaceProps.Humanlike) continue; // Skip non-player pawns and pets, it was getting cluttered
+            if (pawn.Faction != Faction.OfPlayer || !pawn.RaceProps.Humanlike) continue; // Skip non-player pawns and pets
 
             Job currentJob = pawn.CurJob;
+
             if (currentJob == null)
             {
-                Log.Message($"[PawnTaskDisplay] {pawn.Name} has no current job.");
+                if (DevMode)
+                {
+                    Log.Message($"[PawnTaskDisplay] {pawn.Name} has no current job.");
+                }
+
+                // Remove from caches
+                pawnJobReports.Remove(pawn);
+                pawnPreviousJobs.Remove(pawn);
                 continue;
             }
 
-            if (currentJob.def == null)
+            JobDef currentJobDef = currentJob.def;
+
+            if (DevMode && currentJobDef == null)
             {
                 Log.Message($"[PawnTaskDisplay] {pawn.Name} has a job, but the JobDef is null.");
                 continue;
             }
 
-            string reportString = FirstCharToUpper(currentJob.GetReport(pawn));
+            // Check if the job report needs updating
+            if (!pawnJobReports.TryGetValue(pawn, out string cachedReport) ||
+                !pawnPreviousJobs.TryGetValue(pawn, out JobDef previousJobDef) ||
+                previousJobDef != currentJobDef)
+            {
+                cachedReport = FirstCharToUpper(currentJob.GetReport(pawn));
+                
+                // Update caches
+                pawnJobReports[pawn] = cachedReport;
+                pawnPreviousJobs[pawn] = currentJobDef;
+            }
 
-            DrawLabelBelowPawn(pawn, reportString);
+            DrawLabelBelowPawn(pawn, cachedReport);
         }
     }
 
@@ -44,22 +71,21 @@ public class PawnTaskDisplayComponent : MapComponent
         Verse.Text.Font = GameFont.Tiny;
         var labelSize = Verse.Text.CalcSize(label);
 
-        // Position: Slightly below pawn's name
+        // Position: Slightly below pawn's name TODO make this a setting
         Rect labelRect = new Rect(screenPosition.x - (labelSize.x / 2), screenPosition.y + 15, labelSize.x, labelSize.y);
         Verse.Text.Anchor = TextAnchor.UpperCenter;
-        
-        // Set the color to match the pawn name label and draw report
-        Color nameColor = PawnNameColorUtility.PawnNameColorOf(pawn);
-        GUI.color = nameColor;
-        Widgets.Label(labelRect, label);
-        GUI.color = Color.white; // Reset the color back to white, must be done to prevent the rest of the gui being changed
 
+        // Draw the label
+        GUI.color = Color.white;
         Widgets.Label(labelRect, label);
+
         Verse.Text.Anchor = TextAnchor.UpperLeft; // Reset the anchor
     }
 
     public static string FirstCharToUpper(string input)
     {
-        return string.Concat(input[0].ToString().ToUpper(), input.Substring(1));
+        if (string.IsNullOrEmpty(input)) return input;
+
+        return char.ToUpper(input[0]) + input.Substring(1);
     }
 }
