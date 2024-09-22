@@ -15,9 +15,9 @@ Find it on steam [here](https://steamcommunity.com/sharedfiles/filedetails/?id=3
 I have included built-in logging in the mod to help you monitor and understand any bugs. The mod itself is very simple and shouldn't conflict with other mods or cause any issues. I have tested it in most places in the load order and it has worked. Put it as far down as you are able.
 
 ### 🔍 Log Messages Explained
-Here’s a breakdown of the different log messages you might encounter:
+Here’s a breakdown of all the different log messages you might encounter:
 
-2. **Startup Logs:**
+1. **Startup Logs:**
    When you start playing, you should see two logs from Pawn Task Display:
    ```
    [PawnTaskDisplay] Harmony patches applied successfully.
