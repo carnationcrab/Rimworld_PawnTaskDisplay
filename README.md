@@ -77,7 +77,7 @@ Here’s a breakdown of all the different log messages you might encounter:
    ```
    [PawnTaskDisplay] Updating every second.
    ```
-   But if you have Every Second checked in settings, it should log:
+   But if you have Every Frame checked in settings, it should log:
    ```
    [PawnTaskDisplay] Updating every frame.
    ```
