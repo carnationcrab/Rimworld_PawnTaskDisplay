@@ -7,7 +7,8 @@ public class PawnTaskDisplayMod : Mod
 
     public PawnTaskDisplayMod(ModContentPack content) : base(content)
     {
-        settings = GetSettings<PawnTaskDisplaySettings>();
+        settings = PawnTaskDisplaySettings.Instance;
+        GetSettings<PawnTaskDisplaySettings>();
     }
 
     public override void DoSettingsWindowContents(Rect settingsRect)
@@ -16,6 +17,16 @@ public class PawnTaskDisplayMod : Mod
         listingStandard.Begin(settingsRect);
 
         listingStandard.CheckboxLabeled("Show Task Labels", ref settings.showTaskLabels, "Enable or disable the display of pawn task labels.");
+        listingStandard.Label("Task Label Update Frequency:");
+        if (listingStandard.RadioButton("Every Frame", settings.updateFrequency == PawnTaskDisplaySettings.UpdateFrequency.EveryFrame))
+        {
+            settings.updateFrequency = PawnTaskDisplaySettings.UpdateFrequency.EveryFrame;
+        }
+
+        if (listingStandard.RadioButton("Every Second", settings.updateFrequency == PawnTaskDisplaySettings.UpdateFrequency.EverySecond))
+        {
+            settings.updateFrequency = PawnTaskDisplaySettings.UpdateFrequency.EverySecond;
+        }
 
         listingStandard.End();
         base.DoSettingsWindowContents(settingsRect);

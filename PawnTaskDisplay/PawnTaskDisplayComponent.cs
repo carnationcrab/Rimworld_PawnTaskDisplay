@@ -11,13 +11,38 @@ public class PawnTaskDisplayComponent : MapComponent
     {
     }
 
+    private PawnTaskDisplaySettings.UpdateFrequency updateFrequency = PawnTaskDisplaySettings.Instance.updateFrequency;
+
     private Dictionary<Pawn, string> pawnJobReports = new Dictionary<Pawn, string>();
-    private Dictionary<Pawn, JobDef> pawnPreviousJobs = new Dictionary<Pawn, JobDef>(); // Track the previous job of each pawn
+    private Dictionary<Pawn, JobDef> pawnPreviousJobs = new Dictionary<Pawn, JobDef>();
+
+    private int accumulator = 0; // accumulates Rimworld game ticks
 
 
-    public override void MapComponentOnGUI()
+    public override void MapComponentTick()
     {
-        base.MapComponentOnGUI();
+        base.MapComponentTick();
+
+        if (updateFrequency == PawnTaskDisplaySettings.UpdateFrequency.EverySecond)
+        {
+            // Increment tick counter
+            accumulator++;
+
+            // Updates job reports every minute
+            while (accumulator >= 60)
+            {
+                accumulator = 0;
+                WritePawnTaskCache();
+            }
+        }
+        else
+        {
+            WritePawnTaskCache();
+        }
+    }
+
+    private void WritePawnTaskCache()
+    {
         if (Find.CurrentMap != map || !PawnTaskDisplayMod.settings.showTaskLabels) return;
 
         bool DevMode = Prefs.DevMode;
@@ -36,8 +61,7 @@ public class PawnTaskDisplayComponent : MapComponent
                 }
 
                 // Remove from caches
-                pawnJobReports.Remove(pawn);
-                pawnPreviousJobs.Remove(pawn);
+                ClearPawnJobCaches(pawn);
                 continue;
             }
 
@@ -55,14 +79,40 @@ public class PawnTaskDisplayComponent : MapComponent
                 previousJobDef != currentJobDef)
             {
                 cachedReport = FirstCharToUpper(currentJob.GetReport(pawn));
-                
-                // Update caches
-                pawnJobReports[pawn] = cachedReport;
-                pawnPreviousJobs[pawn] = currentJobDef;
-            }
 
-            DrawLabelBelowPawn(pawn, cachedReport);
+                // Update caches
+                UpdatePawnJobCaches(pawn, currentJobDef, cachedReport);
+            }
         }
+    }
+
+    public override void MapComponentOnGUI()
+    {
+        base.MapComponentOnGUI();
+        if (Find.CurrentMap != map || !PawnTaskDisplayMod.settings.showTaskLabels) return;
+
+        foreach (var pawn in map.mapPawns.AllPawnsSpawned)
+        {
+            if (pawn.Faction != Faction.OfPlayer || !pawn.RaceProps.Humanlike) continue; // Skip non-player pawns and pets
+
+            // Retrieve the cached job report
+            if (pawnJobReports.TryGetValue(pawn, out string cachedReport))
+            {
+                DrawLabelBelowPawn(pawn, cachedReport);
+            }
+        }
+    }
+
+    private void UpdatePawnJobCaches(Pawn pawn, JobDef currentJobDef, string cachedReport)
+    {
+        pawnJobReports[pawn] = cachedReport;
+        pawnPreviousJobs[pawn] = currentJobDef;
+    }
+
+    private void ClearPawnJobCaches(Pawn pawn)
+    {
+        pawnJobReports.Remove(pawn);
+        pawnPreviousJobs.Remove(pawn);
     }
 
     private void DrawLabelBelowPawn(Pawn pawn, string label)
