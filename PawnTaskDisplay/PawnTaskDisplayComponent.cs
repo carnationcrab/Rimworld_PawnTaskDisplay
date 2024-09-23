@@ -11,8 +11,6 @@ public class PawnTaskDisplayComponent : MapComponent
     {
     }
 
-    private PawnTaskDisplaySettings.UpdateFrequency updateFrequency = PawnTaskDisplaySettings.Instance.updateFrequency;
-
     private Dictionary<Pawn, string> pawnJobReports = new Dictionary<Pawn, string>();
     private Dictionary<Pawn, JobDef> pawnPreviousJobs = new Dictionary<Pawn, JobDef>();
 
@@ -23,7 +21,7 @@ public class PawnTaskDisplayComponent : MapComponent
     {
         base.MapComponentTick();
 
-        if (updateFrequency == PawnTaskDisplaySettings.UpdateFrequency.EverySecond)
+        if (!PawnTaskDisplayMod.settings.updateEveryFrame)
         {
             // Increment tick counter
             accumulator++;
@@ -33,10 +31,12 @@ public class PawnTaskDisplayComponent : MapComponent
             {
                 accumulator = 0;
                 WritePawnTaskCache();
+                Log.Message("[PawnTaskDisplay] updating every second.");
             }
         }
         else
         {
+            Log.Message("[PawnTaskDisplay] updating every frame.");
             WritePawnTaskCache();
         }
     }

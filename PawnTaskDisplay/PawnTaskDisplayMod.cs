@@ -13,22 +13,25 @@ public class PawnTaskDisplayMod : Mod
 
     public override void DoSettingsWindowContents(Rect settingsRect)
     {
-        Listing_Standard listingStandard = new Listing_Standard();
-        listingStandard.Begin(settingsRect);
+        Listing_Standard SettingsList = new Listing_Standard();
 
-        listingStandard.CheckboxLabeled("Show Task Labels", ref settings.showTaskLabels, "Enable or disable the display of pawn task labels.");
-        listingStandard.Label("Task Label Update Frequency:");
-        if (listingStandard.RadioButton("Every Frame", settings.updateFrequency == PawnTaskDisplaySettings.UpdateFrequency.EveryFrame))
-        {
-            settings.updateFrequency = PawnTaskDisplaySettings.UpdateFrequency.EveryFrame;
-        }
+        SettingsList.Begin(settingsRect);
+        // Title/Header
+        SettingsList.Label("Pawn Task Display Settings", (float)GameFont.Medium);
+        SettingsList.GapLine();
+        SettingsList.Gap(10);
 
-        if (listingStandard.RadioButton("Every Second", settings.updateFrequency == PawnTaskDisplaySettings.UpdateFrequency.EverySecond))
-        {
-            settings.updateFrequency = PawnTaskDisplaySettings.UpdateFrequency.EverySecond;
-        }
+        // Show task labels toggle
+        SettingsList.CheckboxLabeled("Enable Task Display", ref settings.showTaskLabels, "Toggle to enable or disable task labels.");
+        SettingsList.Gap(5);
 
-        listingStandard.End();
+        // Update Frequency Section
+        SettingsList.CheckboxLabeled("Update Task Display Every Frame", ref settings.updateEveryFrame, "Updates labels in real time (Faster! Nicer!) instead of the default, once per second. WARNING: Can cause lag in large colonies.");
+        SettingsList.Gap(5);
+
+        SettingsList.GapLine();
+
+        SettingsList.End();
         base.DoSettingsWindowContents(settingsRect);
     }
 

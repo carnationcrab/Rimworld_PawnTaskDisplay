@@ -16,22 +16,16 @@ public class PawnTaskDisplaySettings : ModSettings
         }
     }
 
-    public enum UpdateFrequency
-    {
-        EveryFrame,
-        EverySecond
-    }
-
     // Settings fields defaults
-    public UpdateFrequency updateFrequency = UpdateFrequency.EverySecond;
     public bool showTaskLabels = true;
+    public bool updateEveryFrame = false;
 
     // Save and load settings
     public override void ExposeData()
     {
         base.ExposeData();
 
-        Scribe_Values.Look(ref updateFrequency, "updateFrequency", updateFrequency);
-        Scribe_Values.Look(ref showTaskLabels, "showTaskLabels", showTaskLabels);
+        Scribe_Values.Look(ref showTaskLabels, "showTaskLabels", true);
+        Scribe_Values.Look(ref updateEveryFrame, "updateEveryFrame", true);
     }
 }
