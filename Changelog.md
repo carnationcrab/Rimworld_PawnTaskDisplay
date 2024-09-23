@@ -7,6 +7,7 @@
 - Optimized task label display by caching job reports and reducing unnecessary calculations.
 - Labels now display in white.
 - Mod settings are now broken out into their own thing.
+- Optimized Logging: Introduced a custom logger for devmode logging.
 
 #### Bug Fixes
 - Resolved a potential performance issue caused by redundant job report retrievals.
