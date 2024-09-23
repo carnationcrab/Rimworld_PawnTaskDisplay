@@ -31,12 +31,12 @@ public class PawnTaskDisplayComponent : MapComponent
             {
                 accumulator = 0;
                 WritePawnTaskCache();
-                Log.Message("[PawnTaskDisplay] updating every second.");
+                ModLog.Message("[PawnTaskDisplay] updating every second.");
             }
         }
         else
         {
-            Log.Message("[PawnTaskDisplay] updating every frame.");
+            ModLog.Message("[PawnTaskDisplay] updating every frame.");
             WritePawnTaskCache();
         }
     }
@@ -55,10 +55,7 @@ public class PawnTaskDisplayComponent : MapComponent
 
             if (currentJob == null)
             {
-                if (DevMode)
-                {
-                    Log.Message($"[PawnTaskDisplay] {pawn.Name} has no current job.");
-                }
+                ModLog.Message($"[PawnTaskDisplay] {pawn.Name} has no current job.");
 
                 // Remove from caches
                 ClearPawnJobCaches(pawn);
@@ -67,9 +64,9 @@ public class PawnTaskDisplayComponent : MapComponent
 
             JobDef currentJobDef = currentJob.def;
 
-            if (DevMode && currentJobDef == null)
+            if (currentJobDef == null)
             {
-                Log.Message($"[PawnTaskDisplay] {pawn.Name} has a job, but the JobDef is null.");
+                ModLog.Message($"[PawnTaskDisplay] {pawn.Name} has a job, but the JobDef is null.");
                 continue;
             }
 

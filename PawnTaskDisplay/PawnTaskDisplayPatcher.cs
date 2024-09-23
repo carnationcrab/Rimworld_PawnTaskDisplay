@@ -8,7 +8,7 @@ public static class DisplayPawnTaskMod
     {
     var harmony = new Harmony("com.losschicken.pawntaskdisplay");
         harmony.PatchAll();
-        Log.Message("[PawnTaskDisplay] Harmony patches applied successfully.");
+        ModLog.Message("[PawnTaskDisplay] Harmony patches applied successfully.");
     }
 }
 
@@ -18,6 +18,6 @@ public static class MapPatch
     static void Postfix(Map __instance)
     {
         __instance.components.Add(new PawnTaskDisplayComponent(__instance));
-        Log.Message("[PawnTaskDisplay] MapComponent added successfully.");
+        ModLog.Message("[PawnTaskDisplay] MapComponent added successfully.");
     }
 }
