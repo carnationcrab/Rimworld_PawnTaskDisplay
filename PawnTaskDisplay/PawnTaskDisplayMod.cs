@@ -18,16 +18,15 @@ public class PawnTaskDisplayMod : Mod
         SettingsList.Begin(settingsRect);
         // Title/Header
         SettingsList.Label("Pawn Task Display Settings", (float)GameFont.Medium);
-        SettingsList.GapLine();
-        SettingsList.Gap(10);
+        SettingsList.DrawHorizontalLineWithGaps();
 
         // Show task labels toggle
         SettingsList.CheckboxLabeled("Enable Task Display", ref settings.showTaskLabels, "Toggle to enable or disable task labels.");
-        SettingsList.Gap(5);
+        SettingsList.SmallGap();
 
         // Update Frequency Section
         SettingsList.CheckboxLabeled("Update Task Display Every Frame", ref settings.updateEveryFrame, "Updates labels in real time (Faster! Nicer!) instead of the default, once per second. WARNING: Can cause lag in large colonies.");
-        SettingsList.Gap(5);
+        SettingsList.SmallGap();
 
         SettingsList.GapLine();
 

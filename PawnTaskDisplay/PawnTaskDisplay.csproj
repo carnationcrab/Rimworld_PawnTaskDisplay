@@ -68,6 +68,7 @@
     <Compile Include="PawnTaskDisplayPatcher.cs" />
     <Compile Include="PawnTaskDisplaySettings.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="SettingsUIHelper.cs" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>
